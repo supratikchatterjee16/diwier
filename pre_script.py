@@ -5,9 +5,6 @@ import sys
 import pandas as pd
 import sqlalchemy as sa
 from sqlalchemy.engine import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.dialects import oracle
-from treelib import Tree
 
 # DB connection
 DIALECT = 'oracle'
