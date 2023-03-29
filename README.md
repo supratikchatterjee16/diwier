@@ -1,2 +1,3 @@
-# prep_db
-Utility for managing data in RDBMS systems. Prepares cross DB migrations, purging, backup and major change scripts accounting for constraints.
+# DI-WIER
+
+A controlled algorithm generation mechanism for massive data operations between one or more RDBMS systems.
