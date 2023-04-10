@@ -1,8 +1,10 @@
-import os
 import sys
-import json
 import argparse
 import logging
+from sqlalchemy.engine import create_engine
+
+from .actions.purge import prepare_purge
+from .actions.backup import prepare_backup
 
 logging.basicConfig(filename = "diwier.log", level=logging.DEBUG)
 
@@ -21,10 +23,19 @@ parser = ArgsParser()
 
 parser.add_argument('-t', '--script-type', required=True, nargs=1, metavar='purge|purge-no-backup|backup|migrate')
 parser.add_argument('-s', '--source', required=True, nargs=1, metavar='Source DB URL') # dialect://username:password@host:port/extensions
-parser.add_argument('-sd', '--source-dialect', required=True, nargs=1, metavar='SQLAlchemy supported dialect')
 parser.add_argument('-d', '--destination', required=False, nargs=1, metavar='Destination DB URL') # dialect+driver://username:password@host:port/?service_name=service
-parser.add_argument('-dd', '--destination-dialect', required=False, nargs=1)
+parser.add_argument('-t', '--tables', required = False, nargs=1, metavar='Tables for which the solution needs to be prepared')
 
+def execute(script_type, source, destination=None, tables=None):
+    if script_type == 'purge':
+        if tables is not None and len(tables) > 0:
+            prepare_purge(create_engine(source), tables)
+    elif script_type == 'backup':
+        prepare_backup(create_engine(source), tables)
+    else :
+        print('No such options exist')
+        sys.exit(1)
+    pass
 
 def run():
     global parser, logger
