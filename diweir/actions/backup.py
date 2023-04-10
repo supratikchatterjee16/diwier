@@ -1,5 +1,5 @@
 import sqlalchemy as sa
 from sqlalchemy.engine import Engine
 
-def prepare_purge(engine : Engine, tables):
+def prepare_backup(engine : Engine, tables):
     pass
