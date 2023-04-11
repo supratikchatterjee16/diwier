@@ -21,10 +21,12 @@ class ArgsParser(argparse.ArgumentParser):
 parser = ArgsParser()
 # adding arguments
 
-parser.add_argument('-t', '--script-type', required=True, nargs=1, help='purge|purge-no-backup|backup|migrate')
-parser.add_argument('-s', '--source', required=True, nargs=1, help='Source DB URL') # dialect://username:password@host:port/extensions
-parser.add_argument('-d', '--destination', required=False, nargs=1, help='Destination DB URL') # dialect+driver://username:password@host:port/?service_name=service
-parser.add_argument('--tables', required = False, nargs=1, help='Tables for which the solution needs to be prepared')
+parser.add_argument('-t', '--script-type',  required = True,    nargs=1, help='purge|purge-no-backup|backup|migrate')
+parser.add_argument('-s', '--source',       required = True,    nargs=1, help='Source DB URL') # dialect://username:password@host:port/extensions
+parser.add_argument('-d', '--destination',  required = False,   nargs=1, help='Destination DB URL') # dialect+driver://username:password@host:port/?service_name=service
+parser.add_argument('--tables',             required = False,   nargs=1, help='Tables for which the solution needs to be prepared')
+parser.add_argument('-m', '--module',       required = True,    nargs=1, help='Module name to prepend to the tables to specify schema')
+parser.add_argument('--package-name',       required = False,   nargs=1, help='Specify the package name to use')
 
 def execute(script_type, source, destination=None, tables=None):
     if script_type == 'purge':
