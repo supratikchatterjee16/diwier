@@ -23,14 +23,11 @@ This can be used as a CLI or API.
 
 ## CLI
 
-As a CLI it requires the following : 
+Use the following command to find all details related to it's execution : 
 
-1. Script Type (required) : This is the type of script that needs to be prepared
-2. Source (required) : A DB connection string to operate on. The dialect and engines supported can be found at [SQLAlchemy](https://docs.sqlalchemy.org/en/20/dialects/)
-3. Target (optional) : A DB connection string to transfer the data to(required for migrations and backups).
-4. Tables (optional) : A list of tables to be used for purging and backups. This is a list of comma separated values, without whitespaces.
-5. Module (required) : The prepared may specify a module to prevent ambiguity during script execution.
-6. Package Name (optional) : The program creates a PL/SQL or TSQL package for purging. The Package names set by default can be overridden using this.
+```shell
+diwier -h
+```
 
 ## API
 
