@@ -1,6 +1,13 @@
 import sqlalchemy
+import logging
+
+logger = logging.getLogger()
 
 class RdbmsConnection:
+    '''
+    The base connection object for maintaining connectios and working with them.
+    Uses SQLAlchemy to provide multiple DB support.
+    '''
     def __init__(self, config):
         self._conn_str = config.connection
         if hasattr(config, 'fetch_size'):
@@ -20,8 +27,8 @@ class RdbmsConnection:
         conn = None
         try :
             conn = self.engine.raw_connection()
-        except:
-            pass
+        except sqlalchemy.SQLAlchemyError as e:
+            logger.error('An err')
         self._current_conn = conn
         return self._current_conn.cursor()
 

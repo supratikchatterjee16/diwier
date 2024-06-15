@@ -35,11 +35,20 @@ async def lifespan(app : FastAPI):
 async def root():
     return 'Hello'
 
+@rest_app.get('/health')
+async def health_check():
+    '''
+    Endpoint for health checks. Checks for the following :
+    
+    1. Memory
+    2. Node CPU utilization
+    ''' 
+    return {'status' : 'ok'}
+
 @rest_app.get('/data')
 async def fetch_data():
     return {"table" : "something", "data" : []}
 
-def start_server(args):
-    rest_config = ServerConfiguration(args)
-    orm.create_all(rest_config.get_conn().engine)
-    uvicorn.run(rest_app, host = rest_config.host, port=rest_config.port)
+def start_server(config : ServerConfiguration):
+    orm.create_all(config.get_conn().engine)
+    uvicorn.run(rest_app, host = config.host, port=config.port)

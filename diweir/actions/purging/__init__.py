@@ -5,6 +5,7 @@ import importlib
 from deg import DependencyGraph
 from sqlalchemy.engine import Engine
 from diweir.mapper import generate_dependencies
+from diweir.config import PurgeConfiguration
 
 def generate_function(locale, module, table, backup_prefix='', backup_suffix = 'PRG_BCKP', prefix='MH', func_suffix='BCKP_DEL', subprograms : list = []):
     bckp_prg_sql = locale.template_function
@@ -12,7 +13,7 @@ def generate_function(locale, module, table, backup_prefix='', backup_suffix = '
     table_name = table.name.upper()
     module = module.upper()
     bckp_table = table_name + '_' + backup_suffix
-    if not backup_prefix is None and len(backup_prefix) > 0 : 
+    if backup_prefix is not None and len(backup_prefix) > 0 : 
         bckp_table = (backup_prefix + '_' + bckp_table).upper()
     func_name = '{prefix}_{table}_{func_suffix}'.format(prefix=prefix, table=table_name, func_suffix=func_suffix)
     # insert and delete conditions building
@@ -91,3 +92,6 @@ def prepare_purge(engine : Engine, module : str, package_name : str = 'BTCH_PRG'
         sys.stdout = orig_out
         print('\rDone        ')
     return bckp_prg_pkg_sql.format(module=module, package=package_name, func_defns=head, func_bodies=body)
+
+def purge(configs : PurgeConfiguration):
+    pass

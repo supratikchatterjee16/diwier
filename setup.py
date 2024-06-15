@@ -33,8 +33,10 @@ setup(
 	include_package_data		= True,
 	long_description		= extd_desc,
 	long_description_content_type	= 'text/markdown',
-	package_data			= {'diweir' : [
+	package_data			= {
+            'diweir' : [
 						'data/*',
+						'resources/*',
 						]},
     entry_points		= {'console_scripts' : ['diweir = diweir:run'],},
 	zip_safe			= True,

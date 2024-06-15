@@ -14,15 +14,29 @@ default_conf = {
      'SERVER_HOST' : '127.0.0.1',
      'SERVER_PORT' : 1232,
      'SERVER_WORKERS' : 4,
-     'SERVER_ADMIN_PASSWORD' : generate_password_hash('diweir', 'scrypt'),
+    #  'SERVER_ADMIN_PASSWORD' : generate_password_hash('diweir', 'scrypt'),
 }
 
 class ServerConfiguration:
     def __init__(self, args):
-        self.host = args.host
-        self.port = args.port
-        self.workers = args.port
-        self.connection = args.meta
+        if args.host :
+            self.host = args.host
+        else :
+            self.host = default_conf['SERVER_HOST']
+        if args.port :
+            self.port = args.port
+        else :
+            self.port = default_conf['SERVER_PORT']
+        if args.workers:
+            self.workers = args.workers
+        else :
+            self.workers = default_conf['SERVER_WORKERS']
+        if args.meta :
+            self.connection = args.meta
+        else :
+            self.connection = default_conf['META_DB_URI']
+        
+        
         self._conn = MetadataConnection(self)
     
     def get_conn(self):
@@ -30,4 +44,8 @@ class ServerConfiguration:
 
 class AnonymizationConfiguration:
     def __init__(self, args):
+        pass
+
+class PurgeConfiguration:
+    def __init__(self):
         pass
