@@ -1,7 +1,26 @@
 # DI-WEIR
 
-A controlled algorithm generation mechanism for massive data operations between one or more RDBMS systems. This helps develop scripts for common 
-large scale actions such as purging, backing up and migrating to another RDBMS format.
+A tool for DataOps on a RDBMS systems.
+The utility is aims to help with :
+
+1. Purging(with/without archival)
+2. Backup(with Anonymzation)
+3. Modelling(OLTP & OLAP)
+4. Anonymization
+5. Test data configuration
+6. RDBMS migration
+7. NoSQL migration(MongoDB)
+
+It also provides the following :
+
+1. Monitoring(role based)
+    - storage health
+    - Average connections and usage
+    - Program executions
+    - Authorizations
+2. Authentication & authorization tracking.
+
+**Note : This is in development and the above lists the target features. Check relases for feature releases.**
 
 ## Installation
 
@@ -43,15 +62,13 @@ Please do contribute to this however possible. We aim to provide data handling s
 
 Done : 
 
-1. Purging with backup
-    1. Oracle
-
 To-do :
 
 1. Purging with backup
     1. PostgreSQL
     2. Redshift
-    3. SQL Server 
+    3. SQL Server
+    4. Oracle
 2. Purging without backup
     1. Oracle
     2. PostgreSQL
@@ -77,22 +94,3 @@ To-do :
     11. Redshift to PostgreSQL
 
 The logical flow for accountability will be made availble below once the algorithm has been ratified.
-
-## Logicals
-
-### Purging
-
-Creates 3 new tables : 
-
-1. PURGE_REQUEST : Header level status posting for all scripts
-2. PURGE_REQUEST_DETAILS : Details for each purge action
-3. PURGE_MODULE_INPUT : Log level details of execution for each module
-
-Single time execution functions within the resultant script : 
-
-1. CREATE_MODULE_REQS : To be execute once for any one module depending on the same schema
-2. DELETE_MODULE_REQS : May be executed for all modules depending on the same schema, deletes the 3 aforementioned tables
-
-Entry point : 
-
-1. RUN_PURGE : Runs the purge script for the specified logic.
