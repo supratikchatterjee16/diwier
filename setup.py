@@ -36,7 +36,7 @@ setup(
 	package_data			= {
             'diweir' : [
 						'data/*',
-						'resources/*',
+						'res/**',
 						]},
     entry_points		= {'console_scripts' : ['diweir = diweir:run'],},
 	zip_safe			= True,
