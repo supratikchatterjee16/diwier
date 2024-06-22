@@ -37,11 +37,6 @@ async def lifespan(app : FastAPI):
 # PUT /migrate : Send migration information data to be created
 # DELETE /migrate : Delete migration information
 
-
-# @rest_app.get('/')
-# async def root():
-#     return 'Hello'
-
 @rest_app.get('/api/health')
 async def health_check():
     '''
