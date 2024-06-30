@@ -1,10 +1,13 @@
 import os
+import sys
 import uvicorn
 from sqlalchemy import Engine
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pathlib import Path
 from contextlib import asynccontextmanager
+import logging
 
 import diweir.models as orm
 from diweir.config import ServerConfiguration
@@ -13,9 +16,15 @@ rest_app = FastAPI()
 rest_config : ServerConfiguration | None = None
 engine : Engine | None = None
 
-frontend_path = os.path.join(Path(__file__).parent.parent, 'res', 'front', 'out')
-print(frontend_path, Path(frontend_path).is_dir())
-rest_app.mount("/", StaticFiles(directory=frontend_path, html = True), name="frontend")
+frontend_path = os.path.join(Path(__file__).parent.parent, 'res', 'front')
+
+# Logging details
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+stream_handler = logging.StreamHandler(sys.stdout)
+log_formatter = logging.Formatter("%(asctime)s [%(processName)s: %(process)d] [%(threadName)s: %(thread)d] [%(levelname)s] %(name)s: %(message)s")
+stream_handler.setFormatter(log_formatter)
+logger.addHandler(stream_handler)
 
 @asynccontextmanager
 async def lifespan(app : FastAPI):
@@ -50,6 +59,17 @@ async def health_check():
 @rest_app.get('/api/data')
 async def fetch_data():
     return {"table" : "something", "data" : []}
+
+@rest_app.get('/')
+async def serve_index():
+    return FileResponse(os.path.join(frontend_path, 'index.html'))
+
+@rest_app.get("/{file_path:path}")
+async def serve_files(file_path : str):
+    logger.error(file_path)
+    if '.' not in file_path.split('/')[-1]:
+        file_path += '.html'
+    return FileResponse(os.path.join(frontend_path, file_path))
 
 def start_server(config : ServerConfiguration):
     orm.create_all(config.get_conn().engine)
