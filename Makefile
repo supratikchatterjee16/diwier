@@ -3,6 +3,7 @@ build-frontend :
 	cd front;\
 	npm install;\
 	npm run build
+	rm -r diweir/res/frontend
 	mv front/out diweir/res/frontend
 
 # Not yet implemented
