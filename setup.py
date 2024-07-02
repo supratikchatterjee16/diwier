@@ -30,9 +30,9 @@ setup(
 	py_modules			= ['diweir'],
 	packages			= find_packages(),
 	package_dir			= {'diweir' : 'diweir'},
-	include_package_data		= True,
 	long_description		= extd_desc,
 	long_description_content_type	= 'text/markdown',
+	include_package_data		= True,
 	package_data			= {
             'diweir' : [
 						'data/*',
