@@ -60,6 +60,7 @@ async def health_check():
 async def fetch_data():
     return {"table" : "something", "data" : []}
 
+# Frontend Routes
 @rest_app.get('/')
 async def serve_index():
     return FileResponse(os.path.join(frontend_path, 'index.html'))
