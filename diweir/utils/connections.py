@@ -28,7 +28,8 @@ class RdbmsConnection:
         try :
             conn = self.engine.raw_connection()
         except sqlalchemy.SQLAlchemyError as e:
-            logger.error('An err')
+            logger.error('An error occured while attempting to connect : ')
+            logger.error(e)
         self._current_conn = conn
         return self._current_conn.cursor()
 

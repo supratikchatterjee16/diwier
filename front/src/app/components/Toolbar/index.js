@@ -7,6 +7,7 @@ import HideSourceOutlinedIcon from '@mui/icons-material/HideSourceOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
 import DashboardCustomizeOutlinedIcon from '@mui/icons-material/DashboardCustomizeOutlined';
+import { StorageOutlined } from "@mui/icons-material";
 
 export default function Toolbar({ select }) {
     const actions = [
@@ -17,6 +18,7 @@ export default function Toolbar({ select }) {
         { action: 'archive', component: ArchiveOutlinedIcon },
         { action: 'purge', component: DeleteOutlinedIcon },
         { action: 'dashboard', component: DashboardCustomizeOutlinedIcon },
+        { action: 'databases', component: StorageOutlined },
     ];
     actions.forEach((elem) => {
         if (elem.action === select) {
@@ -31,7 +33,7 @@ export default function Toolbar({ select }) {
                     (obj, i) => {
                         return <Tooltip title={obj.action.charAt(0).toUpperCase() + obj.action.slice(1)} key={i + 1}>
                             <IconButton size="large" onClick={() => window.location.replace('/' + obj.action)}>
-                                {obj.select ? <obj.component sx={{color : '#ed6c02'}} /> : <obj.component />}
+                                {obj.select ? <obj.component sx={{ color: '#ed6c02' }} /> : <obj.component />}
                             </IconButton>
                         </Tooltip>;
                     }

@@ -44,8 +44,10 @@ class ServerConfiguration:
 
 class AnonymizationConfiguration:
     def __init__(self, args):
+        # Placeholder for Anonymization configurations
         pass
 
 class PurgeConfiguration:
     def __init__(self):
+        # Placeholder for Purge configurations
         pass

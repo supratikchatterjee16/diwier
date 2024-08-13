@@ -28,7 +28,7 @@ if not os.path.exists(config_loc.absolute()):
     except OSError as e:
         logger.info(f'Making directories failed. Check if the user has permissions to make directories at : {config_loc.parent.absolute()}')
     with open(config_loc.absolute(), 'w') as config_file:
-        json.dump(default_conf, config_file)
+        json.dump(default_conf, config_file, indent=4)
     logger.info(f"Log file created at {config_loc.absolute()}")
 
 with open(config_loc.absolute(), 'r') as config_file:

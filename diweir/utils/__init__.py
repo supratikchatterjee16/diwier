@@ -19,8 +19,8 @@ def get_image():
 
 @contextmanager
 def session_scope(conn):
-    SessionLocal = sessionmaker()
-    session= SessionLocal()
+    session_local = sessionmaker()
+    session= session_local()
     try:
         yield session
         session.commit()
