@@ -5,16 +5,18 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Depends, Query
 from fastapi.responses import FileResponse
+from typing import Optional
 
 import diweir.dao as orm
+from diweir.dto import DatabaseDto
 from diweir.dao.common import *
 from diweir.dao.anonymization import *
 from diweir.config import ServerConfiguration
 
 rest_app = FastAPI()
-rest_config: ServerConfiguration | None = None
+server_config: ServerConfiguration | None = None
 
 frontend_path = os.path.join(Path(__file__).parent.parent, "res", "front")
 
@@ -33,7 +35,10 @@ logger.addHandler(stream_handler)
 async def lifespan(app: FastAPI):
     yield
 
-
+def get_connection():
+    global server_config
+    return next(server_config.get_conn().create_session())
+    
 # API Endpoints
 # GET / : Provide Frontend
 # GET /data?params=? : Get information stored in a table, query based on allowed column names.
@@ -66,20 +71,51 @@ async def health_check():
 async def fetch_data():
     return {"table": "something", "data": []}
 
+@rest_app.get("/api/envs")
+async def fetch_envs(
+    name : Optional[str] = Query(None, description="Enviornment Name to find"),
+    session: Session = Depends(get_connection),
+):
+    if name is None :
+        return Environment.get_all(session)
+    else :
+        return Environment.get(session, name)
 
 @rest_app.get("/api/database")
-async def fetch_db_info():
-    pass
+async def fetch_db_info(
+    name: Optional[str] = Query(None, description="DB Connection name to find"),
+    session: Session = Depends(get_connection),
+):
+    if name is None:
+        return Databases.get_all(session)
+    else:
+        return Databases.get(session, name)
 
 
 @rest_app.post("/api/database")
-async def add_database():
-    pass
+async def add_database(
+    database: DatabaseDto,
+    session: Session = Depends(get_connection),
+):
+    """
+    TODO : Apply password encryption mechanism
+    TODO : User authentication flow
+    """
+    try:
+        return Databases.create(session, database)
+    except Exception:
+        raise HTTPException(
+            status_code=500,
+            detail="Unable to add database. Record may already exist or may be failing an intergrity check",
+        )
 
 
 @rest_app.delete("/api/database")
-async def delete_database():
-    pass
+async def delete_database(
+    database: DatabaseDto,
+    session: Session = Depends(get_connection),
+):
+    Databases.delete(session, database)
 
 
 # Frontend Routes
@@ -90,17 +126,19 @@ async def serve_index():
 
 @rest_app.get("/{file_path:path}")
 async def serve_files(file_path: str):
-    logger.error(file_path)
+    if file_path.startswith('api'):
+        return ''
     if "." not in file_path.split("/")[-1]:
         file_path += ".html"
     return FileResponse(os.path.join(frontend_path, file_path))
+    
 
 
 def start_server(config: ServerConfiguration):
-    global rest_config
-    rest_config = config
+    global server_config
+    server_config = config
     # orm.create_all(config.get_conn().engine)
-    conn = rest_config.get_conn()
+    conn = server_config.get_conn()
     orm.Base.metadata.create_all(bind=conn.engine)
     orm.initialize(conn)
-    uvicorn.run(rest_app, host=rest_config.host, port=rest_config.port)
+    uvicorn.run(rest_app, host=server_config.host, port=server_config.port)

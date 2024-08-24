@@ -1,6 +1,8 @@
+from datetime import datetime
 from diweir.utils.connections import MetadataConnection
 from sqlalchemy import select, insert
 from sqlalchemy.orm import declarative_base
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.engine.interfaces import DBAPICursor
 
 # Commented out as will be required later. Currently only SQLAlchemy is accomodateded.
@@ -103,22 +105,37 @@ Base = declarative_base()
 #     end_time = Column("END", DateTime)
 #     status = Column("STATUS", String, nullable=False)
 
-def initialize(conn : MetadataConnection):
+
+def initialize(conn: MetadataConnection):
     # Common tables - Data definition
     from .common import DBProvider, Environment, User, Roles
     from diweir.config.master_data import db_providers, envs
+
     db_stmt = insert(DBProvider).values(db_providers)
-    env_stmt = insert(Environment).values(envs)
-    user_stmt = insert(User).values([])
-    roles_stmt = insert(Roles).values([])
-    with conn as cursor :
-        cursor.execute(db_stmt)
-        cursor.execute(env_stmt)
-        cursor.execute(user_stmt)
-        cursor.execute(roles_stmt)
-    
+    pre_env_stmt = {
+        "created_on": datetime.now(),
+        "modified_on": datetime.now(),
+        "created_by": "admin",
+        "modified_by": "admin",
+    }
+    env_stmt = insert(Environment).values([{**env, **pre_env_stmt} for env in envs])
+
+    # Initialize the below
+    # user_stmt = insert(User).values([])
+    # roles_stmt = insert(Roles).values([])
+    try:
+        with conn.engine.connect() as cursor:
+            cursor.execute(db_stmt)
+            cursor.execute(env_stmt)
+            cursor.commit()
+            # Implement when initialized
+            # cursor.execute(user_stmt)
+            # cursor.execute(roles_stmt)
+    except IntegrityError: 
+        pass
+
     # Anonymization tables - Data definition
     from .anonymization import PiiType
     from diweir.config.master_data import anonymization_map
-    
-    cursor.execute()
+
+    # cursor.execute()

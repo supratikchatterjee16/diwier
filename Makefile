@@ -28,3 +28,6 @@ install : build-frontend
 dev-setup:
 	conda env create
 	cd front; npm i
+
+dev-install: build-frontend
+	pip install -e .

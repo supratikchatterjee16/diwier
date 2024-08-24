@@ -24,7 +24,14 @@ export default function DatabasesPage() {
     const [envRows, setEnvRows] = useState([]);
     const [conRows, setConRows] = useState([]);
     const fetchEnvs = () => {
-        axios.get('/api/envs').then((resp) => { setEnvRows(resp.data); }).catch(() => { console.log("Could not fetch environments"); });
+        let id = 0;
+        axios.get('/api/envs')
+        .then((resp) => {
+            setEnvRows(resp.data.map((current) => {
+                return {...current, id : id++};
+            })); 
+        })
+        .catch((e) => { console.log("Could not fetch environments"); console.error(e);});
     };
     const fetchCons = () => {
         axios.get('/api/conns').then((resp) => { setConRows(resp.data); }).catch(() => { console.log("Could not fetch connections"); });
@@ -40,7 +47,7 @@ export default function DatabasesPage() {
             <Accordion>
                 <AccordionSummary>Environments</AccordionSummary>
                 <AccordionDetails>
-                    <Box sx={{ height: 200, width: '100%' }}>
+                    <Box sx={{ height: 400, width: '100%' }}>
                         <DataGrid
                             rows={envRows}
                             columns={envCols}
@@ -62,7 +69,7 @@ export default function DatabasesPage() {
             <Accordion defaultExpanded>
                 <AccordionSummary>Connections</AccordionSummary>
                 <AccordionDetails>
-                    <Box sx={{ height: 200, width: '100%' }}>
+                    <Box sx={{ height: 500, width: '100%' }}>
                         <DataGrid
                             rows={conRows}
                             columns={conCols}

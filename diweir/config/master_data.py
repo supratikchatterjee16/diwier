@@ -40,7 +40,7 @@ db_providers = [
     {'provider' : 'oracle+cx_oracle', 'name' : 'Oracle'},
     {'provider' : 'postgresql+psycopg2', 'name' : 'PostgreSQL'},
     {'provider' : 'mysql+mysqldb', 'name' : 'MySQL'},
-    {'provider' : 'mssql+pyodbc', 'name' : 'MS SQL Server'},
+    # {'provider' : 'mssql+pyodbc', 'name' : 'MS SQL Server'},
     {'provider' : 'mssql+pymssql', 'name' : 'MS SQL Server'},
     {'provider' : 'sqlite', 'name' : 'SQLite'},
     {'provider' : 'redshift+psycopg2', 'name' : 'Amazon Redshift'},

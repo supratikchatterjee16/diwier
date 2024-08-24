@@ -37,9 +37,9 @@ class ServerConfiguration:
             self.connection = default_conf['META_DB_URI']
         
         
-        self._conn = MetadataConnection(self)
+        self._conn : MetadataConnection = MetadataConnection(self)
     
-    def get_conn(self):
+    def get_conn(self) -> MetadataConnection:
         return self._conn
 
 class AnonymizationConfiguration:
