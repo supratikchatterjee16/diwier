@@ -7,7 +7,7 @@ from pathlib import Path
 import uvicorn
 from fastapi import FastAPI, HTTPException, Depends, Query
 from fastapi.responses import FileResponse
-from typing import Optional
+from typing import List, Optional
 
 import diweir.dao as orm
 from diweir.dto import DatabaseDto
@@ -71,6 +71,7 @@ async def health_check():
 async def fetch_data():
     return {"table": "something", "data": []}
 
+# Environment Routes
 @rest_app.get("/api/envs")
 async def fetch_envs(
     name : Optional[str] = Query(None, description="Enviornment Name to find"),
@@ -80,6 +81,19 @@ async def fetch_envs(
         return Environment.get_all(session)
     else :
         return Environment.get(session, name)
+
+@rest_app.post("/api/envs")
+async def create_env(
+    env : EnvironmentDto,
+    session: Session = Depends(get_connection),
+):
+    return Environment.create(session=session, environment=env)
+
+@rest_app.delete("/api/envs")
+async def delete_env(envs : List[EnvironmentDto], session : Session = Depends(get_connection)):
+    print(envs)
+    for env in envs :
+        Environment.delete(session, env)
 
 @rest_app.get("/api/database")
 async def fetch_db_info(

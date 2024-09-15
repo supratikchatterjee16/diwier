@@ -24,12 +24,12 @@ class Environment(Base):
     modified_by = Column("MODIFIED_BY", String, nullable=False)
 
     def __init__(self, env: EnvironmentDto = None, **kwargs):
-        super.__init__(**kwargs)
+        super().__init__(**kwargs)
         if env:
             self.name = env.name
             self.desc = env.desc
-            self.created_on = datetime.datetime.now()
-            self.modified_on = datetime.datetime.now()
+            self.created_on = datetime.now()
+            self.modified_on = datetime.now()
             # TODO : Change user add logic to something else
             self.created_by = "admin"
             self.modified_by = "admin"
@@ -105,8 +105,8 @@ class Databases(Base):
             self.host = db_data.host
             self.port = db_data.port
             self.schm = db_data.schm
-            self.created_on = datetime.datetime.now()
-            self.modified_on = datetime.datetime.now()
+            self.created_on = datetime.now()
+            self.modified_on = datetime.now()
             # TODO : Change user add logic to something else
             self.created_by = "admin"
             self.modified_by = "admin"
