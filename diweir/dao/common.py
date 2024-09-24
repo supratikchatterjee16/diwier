@@ -1,12 +1,10 @@
 from datetime import datetime
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, insert
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import mapped_column, Mapped, Session
 
 from diweir.dao import Base
 from diweir.dto import DatabaseDto, EnvironmentDto
-
-
 
 class DBProvider(Base):
     __tablename__ = "DB_PRVDR"
