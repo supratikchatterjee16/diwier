@@ -3,9 +3,11 @@ import { createTheme } from '@mui/material/styles';
 // Note : Due to static build, dynamic selection of themes is a bit trickier than normal.
 // Primary effect is that when the page pre-renders, the theme values are all null
 // resulting hooks not being available. Workaround for this is yet to be established.
-// One way is to convert the handling mechanism to Raw JS, sidestepping MUI's themeing mechanism completely.
+// One way is to convert the handling mechanism to Raw JS, 
+// sidestepping MUI's themeing mechanism completely.
 // But this will result in having to rewire a lot of things.
-// Another is to use CSS for the auxillary theme, and inject a class name at component mount, forcing selection of theme over default colours provided.
+// Another is to use CSS for the auxillary theme, and inject a class name at component mount,
+// forcing selection of theme over default colours provided.
 
 // Light theme
 export const lightTheme = createTheme({
